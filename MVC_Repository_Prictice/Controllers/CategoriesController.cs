@@ -10,7 +10,7 @@ using MVC_Repository_Prictice.Models;
 using MVC_Repository_Prictice.Models.Interface;
 using MVC_Repository_Prictice.Models.Repositiry;
 
-namespace MVC_Repository_Prictice.Controllers
+namespace MVC_Repository_Prictice.Web.Controllers
 {
     public class CategoriesController : Controller
     {

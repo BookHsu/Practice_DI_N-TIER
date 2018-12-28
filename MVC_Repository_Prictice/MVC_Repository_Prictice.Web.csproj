@@ -12,8 +12,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MVC_Repository_Prictice</RootNamespace>
-    <AssemblyName>MVC_Repository_Prictice</AssemblyName>
+    <RootNamespace>MVC_Repository_Prictice.Web</RootNamespace>
+    <AssemblyName>MVC_Repository_Prictice.Web</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
@@ -140,33 +140,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Categories.cs">
-      <DependentUpon>NwModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Interface\ICategoryRepository.cs" />
-    <Compile Include="Models\Interface\IProductRepository.cs" />
-    <Compile Include="Models\Interface\IRepository.cs" />
-    <Compile Include="Models\NwModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>NwModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\NwModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>NwModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\NwModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>NwModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Products.cs">
-      <DependentUpon>NwModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Repositiry\CategoryRepository.cs" />
-    <Compile Include="Models\Repositiry\GenericRepository.cs" />
-    <Compile Include="Models\Repositiry\ProductRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -178,25 +151,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\NwModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>NwModel.Context.cs</LastGenOutput>
-      <DependentUpon>NwModel.edmx</DependentUpon>
-    </Content>
-    <Content Include="Models\NwModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>NwModel.edmx</DependentUpon>
-      <LastGenOutput>NwModel.cs</LastGenOutput>
-    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\NwModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>NwModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\NwModel.edmx.diagram">
-      <DependentUpon>NwModel.edmx</DependentUpon>
-    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -251,6 +207,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MVC_Repository_Prictice.Models\MVC_Repository_Prictice.Models.csproj">
+      <Project>{89a159d6-15f6-45d5-b64a-0ec3184dffa2}</Project>
+      <Name>MVC_Repository_Prictice.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

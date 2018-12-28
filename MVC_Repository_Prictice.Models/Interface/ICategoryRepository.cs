@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MVC_Repository_Prictice.Models.Interface
 {
-    interface ICategoryRepository : IRepository<Categories>
+    public interface ICategoryRepository : IRepository<Categories>
     {
         Categories GetById(int categoryID);
     }

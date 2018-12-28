@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace MVC_Repository_Prictice.Controllers
+namespace MVC_Repository_Prictice.Web.Controllers
 {
     public class HomeController : Controller
     {

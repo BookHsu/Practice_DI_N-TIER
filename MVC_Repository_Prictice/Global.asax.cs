@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
-namespace MVC_Repository_Prictice
+namespace MVC_Repository_Prictice.Web
 {
     public class MvcApplication : System.Web.HttpApplication
     {

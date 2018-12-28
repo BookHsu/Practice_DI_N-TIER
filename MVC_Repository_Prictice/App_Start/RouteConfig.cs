@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace MVC_Repository_Prictice
+namespace MVC_Repository_Prictice.Web
 {
     public class RouteConfig
     {

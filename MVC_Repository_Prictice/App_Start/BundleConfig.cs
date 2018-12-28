@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace MVC_Repository_Prictice
+namespace MVC_Repository_Prictice.Web
 {
     public class BundleConfig
     {
