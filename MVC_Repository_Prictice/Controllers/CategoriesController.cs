@@ -7,23 +7,23 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MVC_Repository_Prictice.Models;
-using MVC_Repository_Prictice.Models.Interface;
-using MVC_Repository_Prictice.Models.Repositiry;
+using MVC_Repository_Prictice.Service;
+using MVC_Repository_Prictice.Service.Interface;
 
 namespace MVC_Repository_Prictice.Web.Controllers
 {
     public class CategoriesController : Controller
     {
-        private ICategoryRepository categoryRepository;
+        private ICategoryService categoryService;
 
         public CategoriesController()
         {
-            categoryRepository = new CategoryRepository();
+            categoryService = new CategoryService();
         }
         // GET: Categories
         public ActionResult Index()
         {
-            var categories = categoryRepository.GetAll().ToList();
+            var categories = categoryService.GetAll().ToList();
             return View(categories);
         }
 
@@ -34,7 +34,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var categories = this.categoryRepository.GetById(id.Value);
+            var categories = this.categoryService.GetById(id.Value);
             if (categories == null)
             {
                 return HttpNotFound();
@@ -57,7 +57,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
         {
             if (ModelState.IsValid&& categories!=null)
             {
-                this.categoryRepository.Create(categories);
+                this.categoryService.Create(categories);
                 return RedirectToAction("Index");
             }            
             return View(categories);
@@ -70,7 +70,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Categories categories = categoryRepository.GetById(id.Value);
+            Categories categories = categoryService.GetById(id.Value);
             if (categories == null)
             {
                 return HttpNotFound();
@@ -87,7 +87,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
         {
             if (ModelState.IsValid&&categories!=null)
             {
-                categoryRepository.Update(categories);
+                categoryService.Update(categories);
                 return RedirectToAction("Index");
             }
             return View(categories);
@@ -100,7 +100,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Categories categories = categoryRepository.GetById(id.Value);
+            Categories categories = categoryService.GetById(id.Value);
             if (categories == null)
             {
                 return HttpNotFound();
@@ -115,8 +115,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
         {
             try
             {
-                var category = this.categoryRepository.GetById(id);
-                this.categoryRepository.Delete(category);
+                this.categoryService.Delete(id);                
             }catch (DataException)
             {
                 return RedirectToAction("Delete", new { id = id });
@@ -128,7 +127,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
         {
             if (disposing)
             {
-                categoryRepository.Dispose();
+                categoryService.Dispose();
             }
             base.Dispose(disposing);
         }

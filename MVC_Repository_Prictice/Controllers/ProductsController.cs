@@ -1,34 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using MVC_Repository_Prictice.Models;
-using MVC_Repository_Prictice.Models.Interface;
-using MVC_Repository_Prictice.Models.Repositiry;
+using MVC_Repository_Prictice.Service;
+using MVC_Repository_Prictice.Service.Interface;
 
 namespace MVC_Repository_Prictice.Web.Controllers
 {
     public class ProductsController : Controller
     {
-        private IProductRepository productRepository;
+        private IProductService productService;
 
-        private ICategoryRepository categoryRepository;
+        private ICategoryService categoryService;
+
         public IEnumerable<Categories> Categories
         {
             get
             {
-                return categoryRepository.GetAll();
+                return categoryService.GetAll();
             }
         }
+
         public ProductsController()
         {
-            this.productRepository = new ProductRepository();
-            this.categoryRepository = new CategoryRepository();
+            this.productService = new ProductService();
+            this.categoryService = new CategoryService();
         }
+
         //public ActionResult Index()
         //{
         //    var products = productRepository.GetAll()
@@ -43,13 +43,13 @@ namespace MVC_Repository_Prictice.Web.Controllers
                 ? this.CategorySelectList(categoryID.ToString())
                 : this.CategorySelectList("all");
             var result = category.Equals("all", StringComparison.OrdinalIgnoreCase)
-                ? productRepository.GetAll()
-                : productRepository.GetByCateogy(categoryID);
+                ? productService.GetAll()
+                : productService.GetByCategory(categoryID);
             var products = result.OrderByDescending(x => x.ProductID).ToList();
             ViewBag.Category = category;
             return View(products);
-
         }
+
         [HttpPost]
         public ActionResult ProductsOfCategory(string category)
         {
@@ -70,7 +70,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
                 Value = "all",
                 Selected = selectedValue.Equals("all", StringComparison.OrdinalIgnoreCase)
             });
-            var categories = categoryRepository.GetAll().OrderBy(x => x.CategoryID);
+            var categories = categoryService.GetAll().OrderBy(x => x.CategoryID);
             foreach (var c in categories)
             {
                 items.Add(new SelectListItem()
@@ -82,11 +82,12 @@ namespace MVC_Repository_Prictice.Web.Controllers
             }
             return items;
         }
+
         //=========================================================================================
         public ActionResult Details(int? id, string category)
         {
             if (!id.HasValue) return RedirectToAction("index");
-            Products product = productRepository.GetByID(id.Value);
+            Products product = productService.GetById(id.Value);
             if (product == null)
             {
                 return HttpNotFound();
@@ -94,6 +95,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
             ViewBag.Category = string.IsNullOrWhiteSpace(category) ? "all" : category;
             return View(product);
         }
+
         //=========================================================================================
         public ActionResult Create(string category)
         {
@@ -101,22 +103,24 @@ namespace MVC_Repository_Prictice.Web.Controllers
             ViewBag.Category = string.IsNullOrWhiteSpace(category) ? "all" : category;
             return View();
         }
+
         [HttpPost]
         public ActionResult Create(Products products, string category)
         {
             if (ModelState.IsValid)
             {
-                this.productRepository.Create(products);
+                this.productService.Create(products);
                 return RedirectToAction("Index");
             }
             ViewBag.CategoryID = new SelectList(this.Categories, "CategoryID", "CategoryName", products.CategoryID);
             return View(products);
         }
+
         //=========================================================================================
         public ActionResult Edit(int? id, string category)
         {
             if (!id.HasValue) return RedirectToAction("index");
-            Products product = this.productRepository.GetByID(id.Value);
+            Products product = this.productService.GetById(id.Value);
             if (product == null)
             {
                 return HttpNotFound();
@@ -125,22 +129,24 @@ namespace MVC_Repository_Prictice.Web.Controllers
             ViewBag.Category = string.IsNullOrWhiteSpace(category) ? "all" : category;
             return View(product);
         }
+
         [HttpPost]
         public ActionResult Edit(Products products, string category)
         {
             if (ModelState.IsValid)
             {
-                this.productRepository.Update(products);
+                this.productService.Update(products);
                 return RedirectToAction("Index");
             }
             ViewBag.CategoryID = new SelectList(this.Categories, "CategoryID", "CategoryName", products.CategoryID);
             return View(products);
         }
+
         //=========================================================================================
         public ActionResult Delete(int? id, string category)
         {
             if (!id.HasValue) return RedirectToAction("index");
-            Products product = this.productRepository.GetByID(id.Value);
+            Products product = this.productService.GetById(id.Value);
             if (product == null)
             {
                 return HttpNotFound();
@@ -148,11 +154,11 @@ namespace MVC_Repository_Prictice.Web.Controllers
             ViewBag.Category = string.IsNullOrWhiteSpace(category) ? "all" : category;
             return View(product);
         }
+
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id, string category)
         {
-            Products product = this.productRepository.GetByID(id);
-            this.productRepository.Delete(product);
+            this.productService.Delete(id);
             return RedirectToAction("Index");
         }
 
@@ -160,8 +166,8 @@ namespace MVC_Repository_Prictice.Web.Controllers
         {
             if (disposing)
             {
-                productRepository.Dispose();
-                categoryRepository.Dispose();
+                productService.Dispose();
+                categoryService.Dispose();
             }
             base.Dispose(disposing);
         }

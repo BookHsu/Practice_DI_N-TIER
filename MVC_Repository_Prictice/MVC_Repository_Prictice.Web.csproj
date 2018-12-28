@@ -213,6 +213,10 @@
       <Project>{89a159d6-15f6-45d5-b64a-0ec3184dffa2}</Project>
       <Name>MVC_Repository_Prictice.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MVC_Repository_Prictice.Service\MVC_Repository_Prictice.Service.csproj">
+      <Project>{5a9f817d-f08b-453e-ba32-896487c1281e}</Project>
+      <Name>MVC_Repository_Prictice.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
