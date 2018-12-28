@@ -143,6 +143,8 @@
     <Compile Include="Models\Categories.cs">
       <DependentUpon>NwModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Interface\ICategoryRepository.cs" />
+    <Compile Include="Models\Interface\IProductRepository.cs" />
     <Compile Include="Models\Interface\IRepository.cs" />
     <Compile Include="Models\NwModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -162,7 +164,9 @@
     <Compile Include="Models\Products.cs">
       <DependentUpon>NwModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Repositiry\CategoryRepository.cs" />
     <Compile Include="Models\Repositiry\GenericRepository.cs" />
+    <Compile Include="Models\Repositiry\ProductRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
