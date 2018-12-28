@@ -14,16 +14,16 @@ namespace MVC_Repository_Prictice.Web.Controllers
 {
     public class CategoriesController : Controller
     {
-        private ICategoryService categoryService;
+        private ICategoryService _categoryService;
 
-        public CategoriesController()
+        public CategoriesController(ICategoryService categoryService)
         {
-            categoryService = new CategoryService();
+            _categoryService = categoryService;
         }
         // GET: Categories
         public ActionResult Index()
         {
-            var categories = categoryService.GetAll().ToList();
+            var categories = _categoryService.GetAll().ToList();
             return View(categories);
         }
 
@@ -34,7 +34,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var categories = this.categoryService.GetById(id.Value);
+            var categories = this._categoryService.GetById(id.Value);
             if (categories == null)
             {
                 return HttpNotFound();
@@ -57,7 +57,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
         {
             if (ModelState.IsValid&& categories!=null)
             {
-                this.categoryService.Create(categories);
+                this._categoryService.Create(categories);
                 return RedirectToAction("Index");
             }            
             return View(categories);
@@ -70,7 +70,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Categories categories = categoryService.GetById(id.Value);
+            Categories categories = _categoryService.GetById(id.Value);
             if (categories == null)
             {
                 return HttpNotFound();
@@ -87,7 +87,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
         {
             if (ModelState.IsValid&&categories!=null)
             {
-                categoryService.Update(categories);
+                _categoryService.Update(categories);
                 return RedirectToAction("Index");
             }
             return View(categories);
@@ -100,7 +100,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Categories categories = categoryService.GetById(id.Value);
+            Categories categories = _categoryService.GetById(id.Value);
             if (categories == null)
             {
                 return HttpNotFound();
@@ -115,7 +115,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
         {
             try
             {
-                this.categoryService.Delete(id);                
+                this._categoryService.Delete(id);                
             }catch (DataException)
             {
                 return RedirectToAction("Delete", new { id = id });
@@ -123,13 +123,13 @@ namespace MVC_Repository_Prictice.Web.Controllers
             return RedirectToAction("index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                categoryService.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        _categoryService.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
     }
 }

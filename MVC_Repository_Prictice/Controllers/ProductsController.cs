@@ -11,22 +11,22 @@ namespace MVC_Repository_Prictice.Web.Controllers
 {
     public class ProductsController : Controller
     {
-        private IProductService productService;
+        private IProductService _productService;
 
-        private ICategoryService categoryService;
+        private ICategoryService _categoryService;
 
         public IEnumerable<Categories> Categories
         {
             get
             {
-                return categoryService.GetAll();
+                return _categoryService.GetAll();
             }
         }
 
-        public ProductsController()
+        public ProductsController(IProductService productService,ICategoryService categoryService)
         {
-            this.productService = new ProductService();
-            this.categoryService = new CategoryService();
+            this._productService = productService;
+            this._categoryService = categoryService;
         }
 
         //public ActionResult Index()
@@ -43,8 +43,8 @@ namespace MVC_Repository_Prictice.Web.Controllers
                 ? this.CategorySelectList(categoryID.ToString())
                 : this.CategorySelectList("all");
             var result = category.Equals("all", StringComparison.OrdinalIgnoreCase)
-                ? productService.GetAll()
-                : productService.GetByCategory(categoryID);
+                ? _productService.GetAll()
+                : _productService.GetByCategory(categoryID);
             var products = result.OrderByDescending(x => x.ProductID).ToList();
             ViewBag.Category = category;
             return View(products);
@@ -70,7 +70,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
                 Value = "all",
                 Selected = selectedValue.Equals("all", StringComparison.OrdinalIgnoreCase)
             });
-            var categories = categoryService.GetAll().OrderBy(x => x.CategoryID);
+            var categories = _categoryService.GetAll().OrderBy(x => x.CategoryID);
             foreach (var c in categories)
             {
                 items.Add(new SelectListItem()
@@ -87,7 +87,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
         public ActionResult Details(int? id, string category)
         {
             if (!id.HasValue) return RedirectToAction("index");
-            Products product = productService.GetById(id.Value);
+            Products product = _productService.GetById(id.Value);
             if (product == null)
             {
                 return HttpNotFound();
@@ -109,7 +109,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                this.productService.Create(products);
+                this._productService.Create(products);
                 return RedirectToAction("Index");
             }
             ViewBag.CategoryID = new SelectList(this.Categories, "CategoryID", "CategoryName", products.CategoryID);
@@ -120,7 +120,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
         public ActionResult Edit(int? id, string category)
         {
             if (!id.HasValue) return RedirectToAction("index");
-            Products product = this.productService.GetById(id.Value);
+            Products product = this._productService.GetById(id.Value);
             if (product == null)
             {
                 return HttpNotFound();
@@ -135,7 +135,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                this.productService.Update(products);
+                this._productService.Update(products);
                 return RedirectToAction("Index");
             }
             ViewBag.CategoryID = new SelectList(this.Categories, "CategoryID", "CategoryName", products.CategoryID);
@@ -146,7 +146,7 @@ namespace MVC_Repository_Prictice.Web.Controllers
         public ActionResult Delete(int? id, string category)
         {
             if (!id.HasValue) return RedirectToAction("index");
-            Products product = this.productService.GetById(id.Value);
+            Products product = this._productService.GetById(id.Value);
             if (product == null)
             {
                 return HttpNotFound();
@@ -158,18 +158,18 @@ namespace MVC_Repository_Prictice.Web.Controllers
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id, string category)
         {
-            this.productService.Delete(id);
+            this._productService.Delete(id);
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                productService.Dispose();
-                categoryService.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        _productService.Dispose();
+        //        _categoryService.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
     }
 }

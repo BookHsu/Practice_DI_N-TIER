@@ -53,6 +53,8 @@
     <Compile Include="Categories.cs">
       <DependentUpon>NwModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DbContextFactory\DbContextFactory.cs" />
+    <Compile Include="DbContextFactory\IDbContextFactory.cs" />
     <Compile Include="Interface\IRepository.cs" />
     <Compile Include="NwModel.Context.cs">
       <AutoGen>True</AutoGen>

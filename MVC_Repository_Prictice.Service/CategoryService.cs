@@ -11,7 +11,11 @@ namespace MVC_Repository_Prictice.Service
 {
     public class CategoryService : ICategoryService
     {
-        private IRepository<Categories> repository = new GenericRepository<Categories>();
+        private IRepository<Categories> _repository ;
+        public CategoryService(IRepository<Categories> repository)
+        {
+            this._repository = repository;
+        }
 
         public IResult Create(Categories instance)
         {
@@ -22,7 +26,7 @@ namespace MVC_Repository_Prictice.Service
             IResult result = new Result(false);
             try
             {
-                this.repository.Create(instance);
+                this._repository.Create(instance);
                 result.Success = true;
             }
             catch (Exception ex)
@@ -43,7 +47,7 @@ namespace MVC_Repository_Prictice.Service
 
             try
             {
-                this.repository.Update(instance);
+                this._repository.Update(instance);
 
                 result.Success = true;
             }
@@ -68,7 +72,7 @@ namespace MVC_Repository_Prictice.Service
             {
                 var instance = this.GetById(categoryID);
 
-                this.repository.Delete(instance);
+                this._repository.Delete(instance);
 
                 result.Success = true;
             }
@@ -82,18 +86,18 @@ namespace MVC_Repository_Prictice.Service
 
         public bool IsExists(int categoryID)
         {
-            return this.repository.GetAll().Any(x => x.CategoryID == categoryID);
+            return this._repository.GetAll().Any(x => x.CategoryID == categoryID);
         }
 
         public Categories GetById(int categoryID)
         {
-            return this.repository.Get(x => x.CategoryID == categoryID);
+            return this._repository.Get(x => x.CategoryID == categoryID);
         }
 
         public IEnumerable<Categories> GetAll()
 
         {
-            return this.repository.GetAll();
+            return this._repository.GetAll();
         }
 
         public void Dispose()
@@ -105,10 +109,10 @@ namespace MVC_Repository_Prictice.Service
         {
             if (disposing)
             {
-                if (this.repository != null)
+                if (this._repository != null)
                 {
-                    this.repository.Dispose();
-                    this.repository = null;
+                    this._repository.Dispose();
+                    this._repository = null;
                 }
             }
         }

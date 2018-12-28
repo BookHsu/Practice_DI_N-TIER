@@ -16,6 +16,7 @@ namespace MVC_Repository_Prictice.Web
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            UnityBootstrapper.Initialise();
         }
     }
 }

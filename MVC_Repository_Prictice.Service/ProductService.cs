@@ -11,7 +11,11 @@ namespace MVC_Repository_Prictice.Service
 {
     public class ProductService : IProductService
     {
-        private IRepository<Products> repository = new GenericRepository<Products>();
+        private IRepository<Products> _repository;
+        public ProductService(IRepository<Products> repository)
+        {
+            this._repository = repository;
+        }
 
         public Misc.IResult Create(Products instance)
         {
@@ -22,7 +26,7 @@ namespace MVC_Repository_Prictice.Service
             IResult result = new Result(false);
             try
             {
-                this.repository.Create(instance);
+                this._repository.Create(instance);
                 result.Success = true;
             }
             catch (Exception ex)
@@ -41,7 +45,7 @@ namespace MVC_Repository_Prictice.Service
             IResult result = new Result(false);
             try
             {
-                this.repository.Update(instance);
+                this._repository.Update(instance);
                 result.Success = true;
             }
             catch (Exception ex)
@@ -61,7 +65,7 @@ namespace MVC_Repository_Prictice.Service
             try
             {
                 var instance = this.GetById(productID);
-                this.repository.Delete(instance);
+                this._repository.Delete(instance);
                 result.Success = true;
             }
             catch (Exception ex)
@@ -73,22 +77,22 @@ namespace MVC_Repository_Prictice.Service
 
         public bool IsExists(int productID)
         {
-            return this.repository.GetAll().Any(x => x.ProductID == productID);
+            return this._repository.GetAll().Any(x => x.ProductID == productID);
         }
 
         public Products GetById(int productID)
         {
-            return this.repository.Get(x => x.ProductID == productID);
+            return this._repository.Get(x => x.ProductID == productID);
         }
 
         public IEnumerable<Products> GetAll()
         {
-            return this.repository.GetAll();
+            return this._repository.GetAll();
         }
 
         public IEnumerable<Products> GetByCategory(int categoryID)
         {
-            return this.repository.GetAll().Where(x => x.CategoryID == categoryID);
+            return this._repository.GetAll().Where(x => x.CategoryID == categoryID);
         }
         public void Dispose()
         {
@@ -99,10 +103,10 @@ namespace MVC_Repository_Prictice.Service
         {
             if (disposing)
             {
-                if (this.repository != null)
+                if (this._repository != null)
                 {
-                    this.repository.Dispose();
-                    this.repository = null;
+                    this._repository.Dispose();
+                    this._repository = null;
                 }
             }
         }

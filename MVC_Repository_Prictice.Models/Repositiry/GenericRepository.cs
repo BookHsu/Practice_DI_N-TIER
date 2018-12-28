@@ -5,6 +5,7 @@ using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
+using MVC_Repository_Prictice.Models.DbContextFactory;
 using MVC_Repository_Prictice.Models.Interface;
 
 namespace MVC_Repository_Prictice.Models.Repositiry
@@ -19,34 +20,26 @@ namespace MVC_Repository_Prictice.Models.Repositiry
 
             set;
 
-        }
-
-
-
-        public GenericRepository(): this(new NorthwindEntities())
+        }        
+        public GenericRepository(IDbContextFactory factory)
         {
-
-        }
-
-        public GenericRepository(DbContext context)
-        {
-            if (context == null)
+            if (factory == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException("factory");
             }
-            this._context = context;
+            this._context = factory.GetDbContext();
         }
 
 
-        public GenericRepository(ObjectContext context)
-        {
+        //public GenericRepository(ObjectContext context)
+        //{
 
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-            this._context = new DbContext(context, true);
-        }
+        //    if (context == null)
+        //    {
+        //        throw new ArgumentNullException("context");
+        //    }
+        //    this._context = new DbContext(context, true);
+        //}
         /// <summary>
         /// Creates the specified instance.
         /// </summary>
