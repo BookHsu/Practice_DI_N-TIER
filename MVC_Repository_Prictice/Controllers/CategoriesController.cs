@@ -14,11 +14,11 @@ namespace MVC_Repository_Prictice.Controllers
 {
     public class CategoriesController : Controller
     {
-        private ICategoryRepository categoryRepository;
+        private IRepository<Categories> categoryRepository;
 
         public CategoriesController()
         {
-            categoryRepository = new CategoryRepository();
+            categoryRepository = new GenericRepository<Categories>();
         }
         // GET: Categories
         public ActionResult Index()
@@ -34,7 +34,7 @@ namespace MVC_Repository_Prictice.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var categories = this.categoryRepository.Get(id.Value);
+            var categories = this.categoryRepository.Get(c=>c.CategoryID==id.Value);
             if (categories == null)
             {
                 return HttpNotFound();
@@ -70,7 +70,7 @@ namespace MVC_Repository_Prictice.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Categories categories = categoryRepository.Get(id.Value);
+            Categories categories = categoryRepository.Get(c=>c.CategoryID==id.Value);
             if (categories == null)
             {
                 return HttpNotFound();
@@ -100,7 +100,7 @@ namespace MVC_Repository_Prictice.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Categories categories = categoryRepository.Get(id.Value);
+            Categories categories = categoryRepository.Get(c => c.CategoryID == id.Value);
             if (categories == null)
             {
                 return HttpNotFound();
@@ -115,7 +115,7 @@ namespace MVC_Repository_Prictice.Controllers
         {
             try
             {
-                var category = this.categoryRepository.Get(id);
+                var category = this.categoryRepository.Get(c => c.CategoryID == id);
                 this.categoryRepository.Delete(category);
             }catch (DataException)
             {
