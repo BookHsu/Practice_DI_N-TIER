@@ -7,116 +7,97 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MVC_Repository_Prictice.Models;
+using MVC_Repository_Prictice.Models.Interface;
+using MVC_Repository_Prictice.Models.Repositiry;
 
 namespace MVC_Repository_Prictice.Controllers
 {
     public class ProductsController : Controller
     {
-        private NorthwindEntities db = new NorthwindEntities();
+        private IProductRepository productRepository;
 
-        // GET: Products
+        private ICategoryRepository categoryRepository;
+        public IEnumerable<Categories> Categories
+        {
+            get
+            {
+                return categoryRepository.GetAll();
+            }
+        }
+        public ProductsController()
+        {
+            this.productRepository = new ProductRepository();
+            this.categoryRepository = new CategoryRepository();
+        }
         public ActionResult Index()
         {
-            var products = db.Products.Include(p => p.Categories);
-            return View(products.ToList());
+            var products = productRepository.GetAll().ToList();
+            return View(products);
         }
-
-        // GET: Products/Details/5
-        public ActionResult Details(int? id)
+        //=========================================================================================
+        public ActionResult Details(int id = 0)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Products products = db.Products.Find(id);
-            if (products == null)
+            Products product = productRepository.Get(id);
+            if (product == null)
             {
                 return HttpNotFound();
             }
-            return View(products);
+            return View(product);
         }
-
-        // GET: Products/Create
+        //=========================================================================================
         public ActionResult Create()
         {
-            ViewBag.CategoryID = new SelectList(db.Categories, "CategoryID", "CategoryName");
+            ViewBag.CategoryID = new SelectList(this.Categories, "CategoryID", "CategoryName");
             return View();
         }
-
-        // POST: Products/Create
-        // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
-        // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductID,ProductName,SupplierID,CategoryID,QuantityPerUnit,UnitPrice,UnitsInStock,UnitsOnOrder,ReorderLevel,Discontinued")] Products products)
+        public ActionResult Create(Products products)
         {
             if (ModelState.IsValid)
             {
-                db.Products.Add(products);
-                db.SaveChanges();
+                this.productRepository.Create(products);
                 return RedirectToAction("Index");
             }
-
-            ViewBag.CategoryID = new SelectList(db.Categories, "CategoryID", "CategoryName", products.CategoryID);
+            ViewBag.CategoryID = new SelectList(this.Categories, "CategoryID", "CategoryName", products.CategoryID);
             return View(products);
         }
-
-        // GET: Products/Edit/5
-        public ActionResult Edit(int? id)
+        //=========================================================================================
+        public ActionResult Edit(int id = 0)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Products products = db.Products.Find(id);
-            if (products == null)
+            Products product = this.productRepository.Get(id);
+            if (product == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CategoryID = new SelectList(db.Categories, "CategoryID", "CategoryName", products.CategoryID);
-            return View(products);
+            ViewBag.CategoryID = new SelectList(this.Categories, "CategoryID", "CategoryName", product.CategoryID);
+            return View(product);
         }
-
-        // POST: Products/Edit/5
-        // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
-        // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProductID,ProductName,SupplierID,CategoryID,QuantityPerUnit,UnitPrice,UnitsInStock,UnitsOnOrder,ReorderLevel,Discontinued")] Products products)
+        public ActionResult Edit(Products products)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(products).State = EntityState.Modified;
-                db.SaveChanges();
+                this.productRepository.Update(products);
                 return RedirectToAction("Index");
             }
-            ViewBag.CategoryID = new SelectList(db.Categories, "CategoryID", "CategoryName", products.CategoryID);
+            ViewBag.CategoryID = new SelectList(this.Categories, "CategoryID", "CategoryName", products.CategoryID);
             return View(products);
         }
-
-        // GET: Products/Delete/5
-        public ActionResult Delete(int? id)
+        //=========================================================================================
+        public ActionResult Delete(int id = 0)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Products products = db.Products.Find(id);
-            if (products == null)
+            Products product = this.productRepository.Get(id);
+            if (product == null)
             {
                 return HttpNotFound();
             }
-            return View(products);
+            return View(product);
         }
-
-        // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Products products = db.Products.Find(id);
-            db.Products.Remove(products);
-            db.SaveChanges();
+            Products product = this.productRepository.Get(id);
+            this.productRepository.Delete(product);
             return RedirectToAction("Index");
         }
 
@@ -124,7 +105,8 @@ namespace MVC_Repository_Prictice.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                productRepository.Dispose();
+                categoryRepository.Dispose();
             }
             base.Dispose(disposing);
         }

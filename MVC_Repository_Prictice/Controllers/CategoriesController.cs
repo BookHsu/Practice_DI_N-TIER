@@ -7,27 +7,34 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MVC_Repository_Prictice.Models;
+using MVC_Repository_Prictice.Models.Interface;
+using MVC_Repository_Prictice.Models.Repositiry;
 
 namespace MVC_Repository_Prictice.Controllers
 {
     public class CategoriesController : Controller
     {
-        private NorthwindEntities db = new NorthwindEntities();
+        private ICategoryRepository categoryRepository;
 
+        public CategoriesController()
+        {
+            categoryRepository = new CategoryRepository();
+        }
         // GET: Categories
         public ActionResult Index()
         {
-            return View(db.Categories.ToList());
+            var categories = categoryRepository.GetAll().ToList();
+            return View(categories);
         }
 
         // GET: Categories/Details/5
         public ActionResult Details(int? id)
         {
-            if (id == null)
+            if (!id.HasValue)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
-            Categories categories = db.Categories.Find(id);
+            var categories = this.categoryRepository.Get(id.Value);
             if (categories == null)
             {
                 return HttpNotFound();
@@ -48,24 +55,22 @@ namespace MVC_Repository_Prictice.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "CategoryID,CategoryName,Description,Picture")] Categories categories)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid&& categories!=null)
             {
-                db.Categories.Add(categories);
-                db.SaveChanges();
+                this.categoryRepository.Create(categories);
                 return RedirectToAction("Index");
-            }
-
+            }            
             return View(categories);
         }
 
         // GET: Categories/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            if (!id.HasValue)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
-            Categories categories = db.Categories.Find(id);
+            Categories categories = categoryRepository.Get(id.Value);
             if (categories == null)
             {
                 return HttpNotFound();
@@ -80,10 +85,9 @@ namespace MVC_Repository_Prictice.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "CategoryID,CategoryName,Description,Picture")] Categories categories)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid&&categories!=null)
             {
-                db.Entry(categories).State = EntityState.Modified;
-                db.SaveChanges();
+                categoryRepository.Update(categories);
                 return RedirectToAction("Index");
             }
             return View(categories);
@@ -92,11 +96,11 @@ namespace MVC_Repository_Prictice.Controllers
         // GET: Categories/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            if (!id.HasValue)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
-            Categories categories = db.Categories.Find(id);
+            Categories categories = categoryRepository.Get(id.Value);
             if (categories == null)
             {
                 return HttpNotFound();
@@ -109,17 +113,22 @@ namespace MVC_Repository_Prictice.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Categories categories = db.Categories.Find(id);
-            db.Categories.Remove(categories);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                var category = this.categoryRepository.Get(id);
+                this.categoryRepository.Delete(category);
+            }catch (DataException)
+            {
+                return RedirectToAction("Delete", new { id = id });
+            }
+            return RedirectToAction("index");
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                categoryRepository.Dispose();
             }
             base.Dispose(disposing);
         }
