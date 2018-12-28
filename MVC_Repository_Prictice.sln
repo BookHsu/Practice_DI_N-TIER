@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.168
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVC_Repository_Prictice", "MVC_Repository_Prictice\MVC_Repository_Prictice.csproj", "{54BF870A-7409-4A33-97D7-F3ECB2528B4C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{54BF870A-7409-4A33-97D7-F3ECB2528B4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54BF870A-7409-4A33-97D7-F3ECB2528B4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54BF870A-7409-4A33-97D7-F3ECB2528B4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54BF870A-7409-4A33-97D7-F3ECB2528B4C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8E1D1802-E6FC-4F16-955E-5945C159C75F}
+	EndGlobalSection
+EndGlobal
